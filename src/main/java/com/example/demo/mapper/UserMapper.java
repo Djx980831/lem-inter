@@ -9,9 +9,7 @@ import java.util.List;
 @Repository
 public interface UserMapper {
 
-    User getUser(@Param("id") int id);
+    User login(String userName, String password);
 
-    List<User> getAllUser();
-
-    Integer updateUserById(User user);
+    User getUserById(Integer id);
 }
