@@ -29,7 +29,7 @@ public class UserController {
     @Autowired
     private TokenService tokenService;
 
-    @RequestMapping(value = "/login" ,method = RequestMethod.POST)
+    @GetMapping("/login")
     public RpcResponse<Object> login(String userName, String password, HttpServletResponse response) {
         JSONObject jsonObject = new JSONObject();
         User userForBase = userService.login(userName, password);
@@ -53,8 +53,7 @@ public class UserController {
      * @return String 返回类型
      */
     @UserLoginToken
-    @ApiOperation(value = "获取信息", notes = "获取信息")
-    @RequestMapping(value = "/getMessage" ,method = RequestMethod.POST)
+    @GetMapping("/getMessage")
     public RpcResponse<String> getMessage() {
         // 取出token中带的用户id 进行操作
         System.out.println(TokenUtil.getTokenUserId());
