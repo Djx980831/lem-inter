@@ -1,12 +1,19 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.User;
+import com.example.demo.vo.UserVO;
 
 import java.util.List;
 
 public interface UserService {
 
-    User login(String userName, String password);
+    UserVO login(User user);
 
-    User getUserById(Integer id);
+    String registUser(User user);
+
+    UserVO getUserById(Integer id);
+
+    UserVO getUserByEmail(String email);
+
+    String updatePasswordByEmail(User user);
 }

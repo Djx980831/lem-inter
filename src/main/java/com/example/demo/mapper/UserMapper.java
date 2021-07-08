@@ -1,15 +1,19 @@
 package com.example.demo.mapper;
 
 import com.example.demo.entity.User;
-import org.apache.ibatis.annotations.Param;
+import com.example.demo.vo.UserVO;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Repository
 public interface UserMapper {
 
-    User login(String userName, String password);
+    UserVO login(User user);
 
-    User getUserById(Integer id);
+    String registUser(User user);
+
+    UserVO getUserById(Integer id);
+
+    UserVO getUserByEmail(String email);
+
+    void updatePasswordByEmail(User user);
 }

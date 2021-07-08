@@ -9,6 +9,7 @@ import com.example.demo.annotation.PassToken;
 import com.example.demo.annotation.UserLoginToken;
 import com.example.demo.entity.User;
 import com.example.demo.service.UserService;
+import com.example.demo.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -56,12 +57,12 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                 } catch (JWTDecodeException j) {
                     throw new RuntimeException("401");
                 }
-                User user = userService.getUserById(Integer.valueOf(userId));
+                UserVO user = userService.getUserById(Integer.valueOf(userId));
                 if (user == null) {
                     throw new RuntimeException("用户不存在，请重新登录");
                 }
                 // 验证 token
-                JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(user.getPassword())).build();
+                JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(user.getEmail())).build();
                 try {
                     jwtVerifier.verify(token);
                 } catch (JWTVerificationException e) {
