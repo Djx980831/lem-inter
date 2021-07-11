@@ -43,7 +43,6 @@ public class OrdersController {
         return RpcResponse.success(email);
     }
 
-    @UserLoginToken
     @PostMapping("/getGoodsInfo")
     public RpcResponse<GoodsInfoVO> getGoodsInfo(String type, Integer count) {
         if (count != 10 && count != 20 && count != 30 && count != 40 && count != 50) {

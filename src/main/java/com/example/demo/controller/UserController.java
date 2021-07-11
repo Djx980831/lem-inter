@@ -43,7 +43,7 @@ public class UserController {
     @Autowired
     private RedisService redisService;
 
-    private String validate_code = null;
+    private String validate_code = "";
 
     @PostMapping("/login")
     public RpcResponse<Object> login(String email, String password, HttpServletResponse response) throws NoSuchAlgorithmException {
@@ -109,43 +109,44 @@ public class UserController {
         return RpcResponse.success("data:image/png;base64," + Base64Utils.encodeToString(byteArrayOutputStream.toByteArray()));
     }
 
-    @RequestMapping("/registUser")
-    public RpcResponse<String> registUser(@RequestBody JSONObject data) throws JSONException, NoSuchAlgorithmException {
-
-        //System.out.println(data.toString());
-        JSONObject jsonObject = new JSONObject();
-        jsonObject = data;
-
-        String email = jsonObject.getString("email");
+    @PostMapping("/registUser")
+    public RpcResponse<String> registUser(String email, String password, String code) throws NoSuchAlgorithmException {
+        if (email == null || "".equals(email)) {
+            return RpcResponse.error(EMAIL_IS_EMPTY);
+        }
+        if (password == null || "".equals(password)) {
+            return RpcResponse.error(PASSWORD_IS_EMPTY);
+        }
+        if (code == null || "".equals(code)) {
+            return RpcResponse.error(CODE_IS_EMPTY);
+        }
         if (userService.getUserByEmail(email) != null) {
             return RpcResponse.error(EMAIL_IS_EXIST);
         }
-        String password = jsonObject.getString("password");
-        String validate_code_input = jsonObject.getString("vertify_code");
-        String emailCode = jsonObject.getString("emailCode");
-
-        System.out.println("validate_code: " + validate_code);
-        System.out.println("validate_code_input: " + validate_code_input);
-
-        if (validate_code_input.equals(validate_code)) {
+        if (code.equals(validate_code)) {
             // 验证成功，注册用户
-            if (!emailCode.equals(redisService.getCode(email))) {
-                return RpcResponse.error(CODE_ERROR);
-            }
+//            if (!emailCode.equals(redisService.getCode(email))) {
+//                return RpcResponse.error(CODE_ERROR);
+//            }
             User user = new User();
             user.setEmail(email);
             user.setPassword(Md5.getMd5(password));
-            return RpcResponse.success( userService.registUser(user));
+            return RpcResponse.success(userService.registUser(user));
         } else { // 验证失败
             return RpcResponse.error(CODE_ERROR);
         }
     }
 
     @PostMapping("/sendMail")
-    public RpcResponse<EmailVO> sendMail(String email) {
+    public RpcResponse<EmailVO> sendMail(String email, int type) {
         UserVO userVO = userService.getUserByEmail(email);
         if (userVO == null) {
             return RpcResponse.error(USER_NOT_EXIST);
+        }
+        if (type == 1) {
+            email = "regist" + email;
+        } else {
+            email = "resetPassword" + email;
         }
         String code = RandomCode.getSomeString();
         if (redisService.hasKsy(email)) {
