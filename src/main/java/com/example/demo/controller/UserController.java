@@ -63,6 +63,7 @@ public class UserController {
         } else {
             String token = tokenService.getToken(userForBase);
             jsonObject.put("token", token);
+            jsonObject.put("user", userForBase);
 
             Cookie cookie = new Cookie("token", token);
             cookie.setPath("/");
@@ -121,21 +122,20 @@ public class UserController {
         }
         String password = jsonObject.getString("password");
         String validate_code_input = jsonObject.getString("vertify_code");
+        String emailCode = jsonObject.getString("emailCode");
 
         System.out.println("validate_code: " + validate_code);
         System.out.println("validate_code_input: " + validate_code_input);
 
         if (validate_code_input.equals(validate_code)) {
             // 验证成功，注册用户
-            String code = redisService.getCode(email);
-            if (!code.equals(redisService.getCode(email))) {
+            if (!emailCode.equals(redisService.getCode(email))) {
                 return RpcResponse.error(CODE_ERROR);
             }
             User user = new User();
             user.setEmail(email);
             user.setPassword(Md5.getMd5(password));
-            userService.registUser(user);
-            return RpcResponse.success(email);
+            return RpcResponse.success( userService.registUser(user));
         } else { // 验证失败
             return RpcResponse.error(CODE_ERROR);
         }

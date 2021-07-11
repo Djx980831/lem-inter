@@ -9,7 +9,7 @@ public interface UserMapper {
 
     UserVO login(User user);
 
-    String registUser(User user);
+    void registUser(User user);
 
     UserVO getUserById(Integer id);
 

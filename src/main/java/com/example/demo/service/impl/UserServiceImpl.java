@@ -23,7 +23,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String registUser(User user) {
-        return userMapper.registUser(user);
+        userMapper.registUser(user);
+        return user.getEmail();
     }
 
     @Override

@@ -34,4 +34,10 @@ public class ErrorConstant {
     public static final ErrorInfo CODE_IS_EXIST = new ErrorInfo(107, "验证码十分钟内请勿重复发送");
 
     public static final ErrorInfo CODE_IS_EMPTY = new ErrorInfo(107, "验证码为空，请输入验证码");
+
+
+    /*
+    orders错误代码
+     */
+    public static final ErrorInfo COUNT_IS_ERROR = new ErrorInfo(200, "购买张数错误，购买参数必须为：10,20,30,50,100");
 }

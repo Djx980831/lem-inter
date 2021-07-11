@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.annotation.UserLoginToken;
 import com.example.demo.entity.Orders;
 import com.example.demo.service.OrdersService;
 import com.example.demo.util.RpcResponse;
@@ -9,8 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
-
+import static com.example.demo.constant.ErrorConstant.COUNT_IS_ERROR;
 
 /**
  * @version v1.0
@@ -26,6 +26,7 @@ public class OrdersController {
     @Autowired
     private OrdersService ordersService;
 
+    @UserLoginToken
     @PostMapping("/addOrders")
     public RpcResponse<String> addOrders(String email, Integer type, Integer amount, Integer faceValue, Integer price, Integer totalPrice, Integer onlyPay, Integer income) {
         Orders orders = new Orders();
@@ -42,8 +43,12 @@ public class OrdersController {
         return RpcResponse.success(email);
     }
 
+    @UserLoginToken
     @PostMapping("/getGoodsInfo")
-    public RpcResponse<GoodsInfoVO> getGoodsInfo(Integer type, Integer count) {
+    public RpcResponse<GoodsInfoVO> getGoodsInfo(String type, Integer count) {
+        if (count != 10 && count != 20 && count != 30 && count != 40 && count != 50) {
+            return RpcResponse.error(COUNT_IS_ERROR);
+        }
         return RpcResponse.success(ordersService.getGoodsInfo(type, count));
     }
 }

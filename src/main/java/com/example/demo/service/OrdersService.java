@@ -13,5 +13,5 @@ import com.example.demo.vo.GoodsInfoVO;
 public interface OrdersService {
     void addOrders(Orders orders);
 
-    GoodsInfoVO getGoodsInfo(Integer type, Integer count);
+    GoodsInfoVO getGoodsInfo(String type, Integer count);
 }

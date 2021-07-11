@@ -48,9 +48,9 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Override
-    public GoodsInfoVO getGoodsInfo(Integer type, Integer count) {
+    public GoodsInfoVO getGoodsInfo(String type, Integer count) {
         GoodsInfoVO vo = new GoodsInfoVO();
-        if (type == 1) {
+        if (type.equals("1")) {
            Integer price = mobile.get(count.toString());
            Integer totalPrice = 100 * count;
            Integer onlyPay = price * count;
